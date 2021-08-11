@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bef1eef7-c65d-4cb1-b1ac-fe4b8ef6c60e",
+		"_postman_id": "c6bdb4a0-71f1-47fe-b901-d83b5378a56e",
 		"name": "Safepay-Frontend-Task",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -75,6 +75,15 @@
 			"request": {
 				"method": "PUT",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"class\": 3,\n  \"name\": \"Paul Jones\",\n  \"sex\": \"male\",\n  \"age\": 22,\n  \"siblings\": 1,\n  \"gpa\": 7.25\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/student/1",
 					"host": [
@@ -95,7 +104,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "{{baseURL}}:{{serverPort}}/students",
+					"host": [
+						"{{baseURL}}"
+					],
+					"port": "{{serverPort}}",
+					"path": [
+						"students"
+					]
 				}
 			},
 			"response": []
