@@ -16,6 +16,9 @@ $ ./run_server
 Use React, Typescript, and any frontend libraries and frameworks of your choice to develop a frontend to manage a
 database of students.
 
+The frontend should be styled using the company branding in the included branding guide using CSS, SASS/SCSS, CSS-in-JS,
+or (our preferred option) Styled Components. The company logos are included in a variety of colours in SVG format.
+
 The endpoints are defined in the included Postman file.
 
 The frontend should display the students in some form of grid that can be filtered and sorted. One must have the ability
