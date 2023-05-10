@@ -20,3 +20,18 @@ export const device = {
 	desktop: `(min-width: ${breakpoints.desktop})`,
 	desktopL: `(min-width: ${breakpoints.desktop})`,
 };
+
+export const brandColors = {
+	primary: {
+		blueBlack: "#162f52",
+		blue: "#193A8C",
+		green: "#00cf83",
+	},
+	secondary: {
+		midBlue: "#0467d0",
+		lightBlue: "#1ebbfd",
+		orange: "#ffa700",
+		yellow: "#ffdf50",
+		gray: "#ebf6ff",
+	},
+};

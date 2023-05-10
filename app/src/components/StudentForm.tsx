@@ -1,5 +1,6 @@
 import { Button, Flex, Select, SelectProps, TextInput } from "@mantine/core";
 import { UseFormReturnType, useForm } from "@mantine/form";
+import { FormValidateInput } from "@mantine/form/lib/types";
 
 type FormValues = {
 	age: string;
@@ -28,12 +29,24 @@ const defaultValues: FormValues = {
 	sex: "male",
 };
 
+const validate: FormValidateInput<FormValues> = {
+	age: (value) => (+value.length < 1 ? "Age must be a positive number" : null),
+	class: (value) =>
+		+value.length < 1 ? "Class must be a positive number" : null,
+	gpa: (value) => (+value.length < 1 ? "GPA must be a positive number" : null),
+	name: (value) =>
+		value.length < 3 ? "Name must be at least 3 characters long" : null,
+	siblings: (value) =>
+		+value.length < 0 ? "Siblings must be a positive number" : null,
+	sex: (value) => (!value ? "Please select a gender" : null),
+};
+
 export default function StudentForm({
 	onSubmit,
 	loading = false,
 	initialValues = defaultValues,
 }: StudentFormProps) {
-	const form = useForm<FormValues>({ initialValues });
+	const form = useForm<FormValues>({ initialValues, validate });
 
 	return (
 		<form onSubmit={form.onSubmit((values) => onSubmit(values, form))}>
@@ -75,7 +88,12 @@ export default function StudentForm({
 				/>
 			</Flex>
 			<Flex justify="flex-end">
-				<Button type="submit" mt="xs" loading={loading}>
+				<Button
+					type="submit"
+					mt="xs"
+					loading={loading}
+					// disabled={!form.isValid() || !form.isDirty()}
+				>
 					Submit
 				</Button>
 			</Flex>

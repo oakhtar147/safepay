@@ -21,9 +21,7 @@ export default function StudentModal({
 			centered
 			title={<Title order={4}>Edit Student Details</Title>}
 			size="xl"
-			styles={{
-				inner: { paddingLeft: "0!important" },
-			}}
+			styles={{ inner: { paddingLeft: "0!important" } }}
 		>
 			{!data || isLoading ? (
 				<Flex justify="center">
