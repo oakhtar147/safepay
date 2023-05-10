@@ -5,11 +5,12 @@ import {
 	RouterProvider,
 } from "react-router-dom";
 import App from "./App";
+import StudentsPage from "./pages/Students";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
 		<Route path="/" element={<App />}>
-			<Route path="/" element={<h1>Students</h1>} />
+			<Route path="/" element={<StudentsPage />} />
 		</Route>
 	)
 );

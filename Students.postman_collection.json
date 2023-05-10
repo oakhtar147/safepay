@@ -21,13 +21,9 @@
 				},
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/student",
-					"host": [
-						"{{baseURL}}"
-					],
+					"host": ["{{baseURL}}"],
 					"port": "{{serverPort}}",
-					"path": [
-						"student"
-					]
+					"path": ["student"]
 				}
 			},
 			"response": []
@@ -39,14 +35,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/student/1",
-					"host": [
-						"{{baseURL}}"
-					],
+					"host": ["{{baseURL}}"],
 					"port": "{{serverPort}}",
-					"path": [
-						"student",
-						"1"
-					]
+					"path": ["student", "1"]
 				}
 			},
 			"response": []
@@ -58,14 +49,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/student/1",
-					"host": [
-						"{{baseURL}}"
-					],
+					"host": ["{{baseURL}}"],
 					"port": "{{serverPort}}",
-					"path": [
-						"student",
-						"1"
-					]
+					"path": ["student", "1"]
 				}
 			},
 			"response": []
@@ -86,14 +72,9 @@
 				},
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/student/1",
-					"host": [
-						"{{baseURL}}"
-					],
+					"host": ["{{baseURL}}"],
 					"port": "{{serverPort}}",
-					"path": [
-						"student",
-						"1"
-					]
+					"path": ["student", "1"]
 				}
 			},
 			"response": []
@@ -105,13 +86,9 @@
 				"header": [],
 				"url": {
 					"raw": "{{baseURL}}:{{serverPort}}/students",
-					"host": [
-						"{{baseURL}}"
-					],
+					"host": ["{{baseURL}}"],
 					"port": "{{serverPort}}",
-					"path": [
-						"students"
-					]
+					"path": ["students"]
 				}
 			},
 			"response": []
@@ -122,18 +99,14 @@
 			"listen": "prerequest",
 			"script": {
 				"type": "text/javascript",
-				"exec": [
-					""
-				]
+				"exec": [""]
 			}
 		},
 		{
 			"listen": "test",
 			"script": {
 				"type": "text/javascript",
-				"exec": [
-					""
-				]
+				"exec": [""]
 			}
 		}
 	],
@@ -144,7 +117,7 @@
 		},
 		{
 			"key": "serverPort",
-			"value": "5000"
+			"value": "8000"
 		}
 	]
 }
