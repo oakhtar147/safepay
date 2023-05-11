@@ -1,5 +1,6 @@
-import { ActionIcon, Group, Text } from "@mantine/core";
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Flex, Group, Text, TextInput, Title } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
+import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
 import { sortBy } from "lodash";
 import {
 	DataTable,
@@ -11,25 +12,30 @@ import styled from "styled-components";
 import { useDeleteStudent, useGetAllStudents } from "../api/students";
 import { Student } from "../api/students.types";
 import capitalizeString from "../helpers/capitalize";
+import { brandColors } from "../helpers/css";
 import StudentModal, { useStudentModal } from "./StudentModal";
 
 export default function StudentsTable() {
 	const { data = [], isLoading } = useGetAllStudents();
-	const { records, sortStatus, setSortStatus } = useSortedData(data);
+	const { records, query, handleQueryChange, sortStatus, setSortStatus } =
+		useRecords(data);
 
 	const { opened, studentId, handleOpenModal, handleCloseModal } =
 		useStudentModal();
 
 	const COLUMNS: DataTableColumn<Student>[] = useMemo(
 		() => [
-			{ accessor: "uuid", title: "ID" },
+			{ accessor: "uuid", title: "ID", sortable: true },
 			{ accessor: "name", title: "Name", sortable: true },
 			{ accessor: "age", title: "Age", sortable: true },
 			{ accessor: "siblings", title: "# Siblings", sortable: true },
 			{
 				accessor: "sex",
 				title: "Sex",
-				render: ({ sex }) => <Text>{capitalizeString(sex)}</Text>,
+				sortable: true,
+				render: ({ sex, uuid }) => (
+					<Text key={uuid}>{capitalizeString(sex)}</Text>
+				),
 			},
 			{ accessor: "class", title: "Class", sortable: true },
 			{
@@ -57,13 +63,25 @@ export default function StudentsTable() {
 
 	return (
 		<>
+			<Flex justify="space-between" align="center">
+				<Title mah="2.25rem" my="md" color={brandColors.primary.blue}>
+					Students
+				</Title>
+				<TextInput
+					icon={<IconSearch />}
+					placeholder="Search by name"
+					value={query}
+					onChange={handleQueryChange}
+				/>
+			</Flex>
 			<HeightConstrainedContainer>
 				<DataTable
 					withBorder
 					borderRadius="sm"
 					records={records}
+					idAccessor="uuid"
 					fetching={isLoading}
-					minHeight="100px"
+					minHeight={!records.length ? 150 : undefined}
 					columns={COLUMNS}
 					sortStatus={sortStatus}
 					onSortStatusChange={setSortStatus}
@@ -93,13 +111,32 @@ function DeleteStudentButton({ studentId }: { studentId: number }) {
 	);
 }
 
-function useSortedData(data?: Array<Student>) {
+function useRecords(data: Array<Student> = []) {
 	const [records, setRecords] = useState(sortBy(data, "name"));
+	const [query, setQuery] = useState("");
+	const [debouncedQuery] = useDebouncedValue(query, 200);
 
 	const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
 		columnAccessor: "name" satisfies keyof Student,
 		direction: "asc",
 	});
+
+	const handleQueryChange = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) =>
+			setQuery(event.target.value),
+		[]
+	);
+
+	useEffect(() => {
+		if (!debouncedQuery) setRecords(data);
+
+		const filtered = data.filter(({ name }) => {
+			const searchString = debouncedQuery.trim().toLowerCase();
+			return name.toLowerCase().includes(searchString);
+		});
+
+		setRecords(filtered);
+	}, [debouncedQuery, data]);
 
 	useEffect(() => {
 		const sortedData = sortBy(data, sortStatus.columnAccessor);
@@ -108,7 +145,7 @@ function useSortedData(data?: Array<Student>) {
 		);
 	}, [sortStatus, data]);
 
-	return { records, sortStatus, setSortStatus };
+	return { records, query, handleQueryChange, sortStatus, setSortStatus };
 }
 
 const HeightConstrainedContainer = styled.div`

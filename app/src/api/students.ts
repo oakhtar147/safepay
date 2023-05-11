@@ -8,11 +8,15 @@ export function useGetAllStudents() {
 	);
 }
 
-export function useGetStudentDetails(studentId?: number) {
+export function useGetStudentDetails(
+	studentId?: number,
+	enabled = true,
+	queryKey: string[] = []
+) {
 	return useQuery(
-		["student", studentId],
+		["student", studentId, ...queryKey],
 		() => api.get(`student/${studentId}`).json<Student>(),
-		{ enabled: !!studentId }
+		{ enabled: !!studentId && enabled, keepPreviousData: true }
 	);
 }
 

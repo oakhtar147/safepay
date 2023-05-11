@@ -10,9 +10,6 @@ export default function StudentsPage() {
 
 	return (
 		<div>
-			<Title my="md" color={brandColors.primary.blue}>
-				Students
-			</Title>
 			<StudentsTable />
 			<Title order={3} mt="lg" mb="xs" color={brandColors.primary.blue}>
 				Add new student

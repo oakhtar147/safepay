@@ -1,5 +1,6 @@
 import { MantineProvider, MantineThemeOverride } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { styled } from "styled-components";
 import Header from "./components/Header";
@@ -45,9 +46,15 @@ export default function App() {
 			<MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
 				<Header />
 				<AppContainer>
-					<Outlet />
+					<OutletWithLookupContext />
 				</AppContainer>
 			</MantineProvider>
 		</QueryClientProvider>
 	);
+}
+
+function OutletWithLookupContext() {
+	const [lookup, setLookup] = useState("");
+
+	return <Outlet context={[lookup, setLookup]} />;
 }
