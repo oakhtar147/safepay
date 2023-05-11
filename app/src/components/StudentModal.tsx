@@ -59,7 +59,6 @@ export default function StudentModal({
 	);
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useStudentModal() {
 	const [opened, { open, close }] = useDisclosure(false);
 	const studentIdRef = useRef<number>();
