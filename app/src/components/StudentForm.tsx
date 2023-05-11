@@ -16,7 +16,7 @@ type StudentFormProps = {
 		student: FormValues,
 		form: UseFormReturnType<FormValues, (values: FormValues) => FormValues>
 	) => void;
-	loading?: boolean;
+	isLoading?: boolean;
 	initialValues?: FormValues;
 };
 
@@ -43,7 +43,7 @@ const validate: FormValidateInput<FormValues> = {
 
 export default function StudentForm({
 	onSubmit,
-	loading = false,
+	isLoading = false,
 	initialValues = defaultValues,
 }: StudentFormProps) {
 	const form = useForm<FormValues>({ initialValues, validate });
@@ -91,8 +91,8 @@ export default function StudentForm({
 				<Button
 					type="submit"
 					mt="xs"
-					loading={loading}
-					// disabled={!form.isValid() || !form.isDirty()}
+					loading={isLoading}
+					disabled={!form.isValid() || !form.isDirty()}
 				>
 					Submit
 				</Button>

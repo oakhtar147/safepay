@@ -29,7 +29,7 @@ export default function StudentModal({
 				</Flex>
 			) : (
 				<StudentForm
-					loading={isEditing}
+					isLoading={isEditing}
 					onSubmit={(values) => {
 						if (!studentId) return;
 						mutate(

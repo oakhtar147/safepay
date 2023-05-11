@@ -1,11 +1,8 @@
 import { Button, Flex, Text, TextInput, Title } from "@mantine/core";
-import {
-	IconHourglassEmpty,
-	IconMoodSad,
-	IconSearch,
-} from "@tabler/icons-react";
+import { IconHourglassEmpty, IconSearch } from "@tabler/icons-react";
 import { useCallback, useMemo } from "react";
 import { useGetStudentDetails } from "../api/students";
+import { ServerError } from "../components/ErrorBoundary";
 import StudentCard from "../components/StudentCard";
 import { brandColors } from "../helpers/css";
 import isStringNumeric from "../helpers/isStringNumeric";
@@ -50,12 +47,7 @@ export default function LookupPage() {
 						Search
 					</Button>
 				</div>
-				{!!error && (
-					<Flex align="center" gap="xs">
-						<IconMoodSad color="red" />
-						<Text color="red">Internal Server Error</Text>
-					</Flex>
-				)}
+				{!!error && <ServerError />}
 				{data ? (
 					<StudentCard student={data} />
 				) : (

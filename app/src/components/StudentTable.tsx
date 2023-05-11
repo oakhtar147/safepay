@@ -1,22 +1,33 @@
 import { ActionIcon, Flex, Group, Text, TextInput, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconEdit, IconSearch, IconTrash } from "@tabler/icons-react";
-import { sortBy } from "lodash";
+import capitalize from "lodash/capitalize";
+import sortBy from "lodash/sortBy";
 import {
 	DataTable,
 	DataTableColumn,
 	DataTableSortStatus,
 } from "mantine-datatable";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { useDeleteStudent, useGetAllStudents } from "../api/students";
+import { useDeleteStudent } from "../api/students";
 import { Student } from "../api/students.types";
-import capitalizeString from "../helpers/capitalize";
 import { brandColors } from "../helpers/css";
 import StudentModal, { useStudentModal } from "./StudentModal";
 
-export default function StudentsTable() {
-	const { data = [], isLoading } = useGetAllStudents();
+type StudentTableProps = {
+	data: Array<Student>;
+	isLoading?: boolean;
+	isError?: boolean;
+	errorElement?: ReactNode;
+};
+
+export default function StudentsTable({
+	data,
+	isLoading = false,
+	isError = false,
+	errorElement,
+}: StudentTableProps) {
 	const { records, query, handleQueryChange, sortStatus, setSortStatus } =
 		useRecords(data);
 
@@ -33,9 +44,7 @@ export default function StudentsTable() {
 				accessor: "sex",
 				title: "Sex",
 				sortable: true,
-				render: ({ sex, uuid }) => (
-					<Text key={uuid}>{capitalizeString(sex)}</Text>
-				),
+				render: ({ sex, uuid }) => <Text key={uuid}>{capitalize(sex)}</Text>,
 			},
 			{ accessor: "class", title: "Class", sortable: true },
 			{
@@ -68,6 +77,7 @@ export default function StudentsTable() {
 					Students
 				</Title>
 				<TextInput
+					disabled={isError}
 					icon={<IconSearch />}
 					placeholder="Search by name"
 					value={query}
@@ -75,17 +85,21 @@ export default function StudentsTable() {
 				/>
 			</Flex>
 			<HeightConstrainedContainer>
-				<DataTable
-					withBorder
-					borderRadius="sm"
-					records={records}
-					idAccessor="uuid"
-					fetching={isLoading}
-					minHeight={!records.length ? 150 : undefined}
-					columns={COLUMNS}
-					sortStatus={sortStatus}
-					onSortStatusChange={setSortStatus}
-				/>
+				{!isError ? (
+					<DataTable
+						withBorder
+						borderRadius="sm"
+						records={records}
+						idAccessor="uuid"
+						fetching={isLoading}
+						minHeight={!records.length ? 150 : undefined}
+						columns={COLUMNS}
+						sortStatus={sortStatus}
+						onSortStatusChange={setSortStatus}
+					/>
+				) : (
+					errorElement
+				)}
 			</HeightConstrainedContainer>
 			<StudentModal
 				studentId={studentId}

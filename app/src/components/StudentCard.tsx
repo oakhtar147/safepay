@@ -1,6 +1,6 @@
 import { Badge, Card, CardProps, Group, Text } from "@mantine/core";
+import capitalize from "lodash/capitalize";
 import { Student } from "../api/students.types";
-import capitalizeString from "../helpers/capitalize";
 
 export default function StudentCard({
 	student,
@@ -11,7 +11,7 @@ export default function StudentCard({
 			<Group position="apart" mb="xs">
 				<Text weight={500}>{student.name}</Text>
 				<Badge color={student.sex === "male" ? "blue" : "pink"} variant="light">
-					{capitalizeString(student.sex)}
+					{capitalize(student.sex)}
 				</Badge>
 			</Group>
 			<Text size="sm" color="dimmed">

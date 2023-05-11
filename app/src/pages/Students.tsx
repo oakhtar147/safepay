@@ -1,16 +1,23 @@
 import { Text, Title } from "@mantine/core";
 
-import { useAddStudent } from "../api/students";
+import { useAddStudent, useGetAllStudents } from "../api/students";
+import { ServerError } from "../components/ErrorBoundary";
 import StudentForm from "../components/StudentForm";
 import StudentsTable from "../components/StudentTable";
 import { brandColors } from "../helpers/css";
 
 export default function StudentsPage() {
-	const { mutate, isLoading } = useAddStudent();
+	const allStudentsQuery = useGetAllStudents();
+	const addStudent = useAddStudent();
 
 	return (
 		<div>
-			<StudentsTable />
+			<StudentsTable
+				data={allStudentsQuery.data ?? []}
+				isLoading={allStudentsQuery.isLoading}
+				isError={allStudentsQuery.isError}
+				errorElement={<ServerError />}
+			/>
 			<Title order={3} mt="lg" mb="xs" color={brandColors.primary.blue}>
 				Add new student
 			</Title>
@@ -18,9 +25,9 @@ export default function StudentsPage() {
 				Fill out the form to add a new student.
 			</Text>
 			<StudentForm
-				loading={isLoading}
+				isLoading={addStudent.isLoading}
 				onSubmit={(values, form) =>
-					mutate(
+					addStudent.mutate(
 						{
 							name: values.name,
 							age: +values.age,
