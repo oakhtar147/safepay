@@ -1,18 +1,26 @@
 import { Button, Flex, Text, TextInput, Title } from "@mantine/core";
-import { IconHourglassEmpty, IconSearch } from "@tabler/icons-react";
+import {
+	IconHourglassEmpty,
+	IconMoodSad,
+	IconSearch,
+} from "@tabler/icons-react";
 import { useCallback, useMemo } from "react";
 import { useGetStudentDetails } from "../api/students";
 import StudentCard from "../components/StudentCard";
 import { brandColors } from "../helpers/css";
 import isStringNumeric from "../helpers/isStringNumeric";
-import useLookup from "../hooks/useLookup";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setLookup } from "../store/lookup";
 
 export default function LookupPage() {
-	const [lookup, setLookup] = useLookup();
+	const lookup = useAppSelector((state) => state.lookup);
+	const dispatch = useAppDispatch();
 
-	const { data, isRefetching, refetch } = useGetStudentDetails(+lookup, false, [
-		"lookup",
-	]);
+	const { data, error, isRefetching, refetch } = useGetStudentDetails(
+		+lookup,
+		false,
+		["lookup"]
+	);
 
 	const fetchStudent = useCallback(() => refetch(), [refetch]);
 	const isValidInput = useMemo(() => isStringNumeric(lookup), [lookup]);
@@ -31,18 +39,23 @@ export default function LookupPage() {
 						placeholder="By Student ID"
 						error={!isValidInput ? "Student ID must be a number" : undefined}
 						value={lookup}
-						onChange={(event) => setLookup(event.currentTarget.value)}
+						onChange={(event) => dispatch(setLookup(event.currentTarget.value))}
 					/>
 					<Button
 						mt="xs"
-						disabled={!isValidInput || isRefetching}
+						disabled={!isValidInput || !lookup || isRefetching}
 						loading={isRefetching}
 						onClick={fetchStudent}
 					>
 						Search
 					</Button>
 				</div>
-
+				{!!error && (
+					<Flex align="center" gap="xs">
+						<IconMoodSad color="red" />
+						<Text color="red">Internal Server Error</Text>
+					</Flex>
+				)}
 				{data ? (
 					<StudentCard student={data} />
 				) : (

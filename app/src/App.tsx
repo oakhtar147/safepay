@@ -1,10 +1,10 @@
 import { MantineProvider, MantineThemeOverride } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { styled } from "styled-components";
 import Header from "./components/Header";
 import { brandColors, device } from "./helpers/css";
+import StoreProvider from "./store";
 
 const AppContainer = styled.div`
 	padding: 1rem 1rem;
@@ -22,7 +22,11 @@ const AppContainer = styled.div`
 	}
 `;
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: { retry: false }, // For the sake of this assignment, we do not want to retry failing queries.
+	},
+});
 
 const theme: MantineThemeOverride = {
 	components: {
@@ -46,15 +50,11 @@ export default function App() {
 			<MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
 				<Header />
 				<AppContainer>
-					<OutletWithLookupContext />
+					<StoreProvider>
+						<Outlet />
+					</StoreProvider>
 				</AppContainer>
 			</MantineProvider>
 		</QueryClientProvider>
 	);
-}
-
-function OutletWithLookupContext() {
-	const [lookup, setLookup] = useState("");
-
-	return <Outlet context={[lookup, setLookup]} />;
 }
